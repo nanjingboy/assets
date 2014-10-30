@@ -8,7 +8,7 @@ class Coffeescript extends AbstractCompiler
 {
     protected static $_type = 'js';
 
-    protected function _compile($srcFile, $distFile)
+    protected static function _compile($srcFile, $distFile)
     {
         /**
          * As CoffeeScript cli can't set a different file path with compile command,

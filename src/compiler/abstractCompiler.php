@@ -8,8 +8,6 @@ abstract class AbstractCompiler
 {
     protected static $_type;
 
-    abstract protected function _compile($srcFile, $distFile);
-
     private static function _getDirectoryPath()
     {
         if (static::$_type === 'js') {
