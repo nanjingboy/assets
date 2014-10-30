@@ -11,25 +11,20 @@ final class Config
     private static $_compiledJsDirectoryPath;
     private static $_compiledCssDirectoryPath;
 
-
     public static function init($serverRootPath,
         $jsDirectoryPath, $cssDirectoryPath,
         $compiledJsDirectoryPath, $compiledCssDirectoryPath)
     {
-        self::$_serverRootPath = realpath($serverRootPath);
 
-        self::$_jsDirectoryPath = realpath($jsDirectoryPath);
-        self::$_cssDirectoryPath = realpath($cssDirectoryPath);
-
-
-        if (file_exists($compiledJsDirectoryPath) === false) {
-            mkdir($compiledJsDirectoryPath, 0770, true);
-        }
-        if (file_exists($compiledCssDirectoryPath) === false) {
-            mkdir($compiledCssDirectoryPath, 0770, true);
-        }
-        self::$_compiledJsDirectoryPath = realpath($compiledJsDirectoryPath);
-        self::$_compiledCssDirectoryPath = realpath($compiledCssDirectoryPath);
+        self::$_serverRootPath = rtrim($serverRootPath, DIRECTORY_SEPARATOR);
+        self::$_jsDirectoryPath = rtrim($jsDirectoryPath, DIRECTORY_SEPARATOR);
+        self::$_cssDirectoryPath = rtrim($cssDirectoryPath, DIRECTORY_SEPARATOR);
+        self::$_compiledJsDirectoryPath = rtrim(
+            $compiledJsDirectoryPath, DIRECTORY_SEPARATOR
+        );
+        self::$_compiledCssDirectoryPath = rtrim(
+            $compiledCssDirectoryPath, DIRECTORY_SEPARATOR
+        );
     }
 
     public static function __callStatic($method, $arguments)
