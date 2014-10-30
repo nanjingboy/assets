@@ -1,0 +1,2 @@
+<?php
+Assets\Config::init();
