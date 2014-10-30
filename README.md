@@ -1,6 +1,6 @@
 ### Assets:
 
-Assets is a assets Manager for PHP.
+Assets is a assets manager for PHP.
 
 ### Getting Started:
 
