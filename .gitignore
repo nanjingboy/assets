@@ -1,3 +1,4 @@
 vendor/
 bin/
+test/app/tmp/
 composer.lock
