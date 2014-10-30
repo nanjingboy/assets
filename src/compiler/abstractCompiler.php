@@ -54,7 +54,7 @@ abstract class AbstractCompiler
         if (file_exists($distFile) === false) {
             $distFilePath = $distFile->getPath();
             if (file_exists($distFilePath) === false) {
-                mkdir($distFilePath, 0770, true);
+                mkdir($distFilePath, 0774, true);
             }
             if (static::_compile($srcFile, $distFile) === false) {
                 return false;
