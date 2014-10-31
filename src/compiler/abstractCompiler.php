@@ -27,9 +27,13 @@ abstract class AbstractCompiler
     private static function _getDistFile($srcFile)
     {
         $srcFilePath = trim(
-            str_replace(self::_getDirectory(), '', $srcFile->getPath()),
+            str_replace(self::_getDirectory(), '', $srcFile->getPath() . DIRECTORY_SEPARATOR),
             DIRECTORY_SEPARATOR
-        ) . DIRECTORY_SEPARATOR;
+        );
+        if (!empty($srcFilePath)) {
+            $srcFilePath = $srcFilePath . DIRECTORY_SEPARATOR;
+        }
+
         $distFileName = $srcFile->getBasename(
             '.' . $srcFile->getExtension()
         ) . '_' . md5($srcFile->getMTime()) . '.' . static::$_type;
