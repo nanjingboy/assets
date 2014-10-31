@@ -10,7 +10,7 @@ trait Url
         $contents = file_get_contents($file);
         $matches = array();
         preg_match_all(
-            '/(image-url|font-url)\s*\(\s*(\'|\")\s*(.+)\s*(\'|\")\s*\)\s*/mi',
+            '/(image-url|font-url)\s*\(\s*(\'|\")\s*([^"\'\)]*)\s*(\'|\")\s*\)\s*/mi',
             $contents,
             $matches
         );
