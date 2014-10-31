@@ -1,7 +1,6 @@
 <?php
 namespace Assets\Compiler;
 
-use Assets\Config;
 use Assets\Shell;
 
 class Coffeescript extends AbstractCompiler
