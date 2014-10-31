@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'font';
+  src: font-url('http://somehost.com/font.eot');
+  src: font-url('https://somehost.com/font.eot');
+  src: font-url('data:application/font-eot:base64,0');
+  src: font-url('font.eot');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.baner {background-image: image-url("baner.png");}
+.avatar {background-image: image-url("/users/avatar.png?name=test");}
+.data {background-image: image-url('data:image/png:base64,0');}
+.http {background-image: image-url("http://somehost.com/image.png");}
+.https {background-image: image-url("https://somehost.com/image.png");}
