@@ -1,0 +1,17 @@
+@import "variable";
+@import "mixin";
+
+body {
+  color: $primary-color;
+  .box {
+    @include border-radius(10px);
+  }
+
+  @font-face {
+    font-family: 'font';
+    src: font-url('font.eot');
+    font-weight: normal;
+    font-style: normal;
+  }
+  .baner {background-image: image-url("baner.png");}
+}
