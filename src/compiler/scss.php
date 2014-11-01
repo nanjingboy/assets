@@ -3,10 +3,8 @@ namespace Assets\Compiler;
 
 use Assets\Shell;
 
-class Scss extends AbstractCompiler
+class Scss extends Css
 {
-    use Url;
-
     protected static $_type = 'css';
 
     protected static function _compile($srcFile, $distFile)
@@ -14,7 +12,7 @@ class Scss extends AbstractCompiler
         $command = 'scss --style compressed --no-cache --sourcemap=none '  .
             $srcFile->getPathName() . ' ' . $distFile->getPathName();
         if (Shell::run($command) === true) {
-            return self::_urlCompile($distFile->getPathName());
+            return self::_urlCompile($distFile->getPathName(), $srcFile->getPath());
         }
 
         return false;

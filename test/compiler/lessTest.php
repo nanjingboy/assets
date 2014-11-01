@@ -6,9 +6,9 @@ class LessTest extends PHPUnit_Framework_TestCase
 {
     public function testCompile()
     {
-        $compiledFilePath = Less::compile('base.less');
+        $compiledFilePath = Less::compile('users/base.less');
         $this->assertFileEquals(
-            Config::getServerRootPath() . '/expected/assets/stylesheets/base.css',
+            Config::getServerRootPath() . '/expected/assets/stylesheets/users/base.css',
             Config::getServerRootPath() . $compiledFilePath
         );
     }

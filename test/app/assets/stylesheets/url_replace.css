@@ -8,6 +8,8 @@
   font-style: normal;
 }
 
+.error-image-url {background-image: url(../../../baner.png);}
+.image {background-image: url(baner.png);}
 .baner {background-image: image-url("baner.png");}
 .avatar {background-image: image-url("/users/avatar.png?name=test");}
 .data {background-image: image-url('data:image/png:base64,0');}
