@@ -5,8 +5,6 @@ use Assets\Shell;
 
 class Scss extends Css
 {
-    protected static $_type = 'css';
-
     protected static function _compile($srcFile, $distFile)
     {
         $command = 'scss --style compressed --no-cache --sourcemap=none '  .

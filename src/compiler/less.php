@@ -5,8 +5,6 @@ use Assets\Shell;
 
 class Less extends Css
 {
-    protected static $_type = 'css';
-
     protected static function _compile($srcFile, $distFile)
     {
         $command = 'lessc -x ' . $srcFile->getPathName() . ' > ' . $distFile->getPathName();
