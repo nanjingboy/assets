@@ -3,7 +3,7 @@ namespace Assets\Compiler;
 
 use Assets\Shell;
 
-class Coffeescript extends AbstractCompiler
+class Coffee extends AbstractCompiler
 {
     protected static $_type = 'js';
 
