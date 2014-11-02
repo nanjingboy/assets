@@ -45,9 +45,12 @@ abstract class AbstractCompiler
 
     public static function compile($file)
     {
-        $srcFile = new SplFileInfo(
-            self::_getDirectory() . ltrim($file, DIRECTORY_SEPARATOR)
-        );
+        $baseDir = self::_getDirectory();
+        if (strpos($file, $baseDir) !== 0) {
+            $file = $baseDir . ltrim($file, DIRECTORY_SEPARATOR);
+        }
+
+        $srcFile = new SplFileInfo($file);
         if (file_exists($srcFile) === false) {
             return false;
         }
