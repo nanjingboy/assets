@@ -1,2 +1,56 @@
 #!/usr/bin/env php
 <?php
+if (is_file(__DIR__ . '/../vendor/autoload.php')) {
+    require __DIR__ . '/../vendor/autoload.php';
+} else if (is_file(__DIR__ . '/../../autoload.php')) {
+    require __DIR__ . '/../../autoload.php';
+}
+
+function requireConfig($input)
+{
+    $configPath = $input->getArgument('config');
+    if ($configPath === null) {
+        require __DIR__ . '/../configs/assets.php';
+    } else {
+        require $configPath;
+    }
+}
+
+$commander = new Commander();
+$commander->name('assets')
+    ->version('0.1.0')
+    ->command(
+        array(
+            'name' => 'compile',
+            'description' => 'Compile a asset to JavaScript or Css file.',
+            'arguments' => array(
+                array(
+                    'name' => 'path',
+                    'description' => 'Path of the asset.',
+                    'mode' => Commander::ARGUMENT_REQUIRED
+                ),
+                array(
+                    'name' => 'config',
+                    'description' => 'Path of the init config: a php script file.'
+                )
+            ),
+            'callback' => function($input, $output) {
+                $srcFile = new SplFileInfo($input->getArgument('path'));
+                if (file_exists($srcFile)) {
+                    $type = $srcFile->getExtension();
+                    if (in_array($type, array('css', 'scss', 'less', 'coffee'))) {
+                        requireConfig($input);
+                        $srcFile = $srcFile->getRealPath();
+                        $class = '\\Assets\\Compiler\\' . ucfirst($type);
+                        $distFile = $class::compile($srcFile);
+                        if ($distFile === false) {
+                            $output->writeln("<error>Can't compile file:{$srcFile}</error>");
+                        } else {
+                            $output->writeln("<info>Create file to</info>:{$distFile}");
+                        }
+                    }
+                }
+            }
+        )
+    )
+    ->run();
