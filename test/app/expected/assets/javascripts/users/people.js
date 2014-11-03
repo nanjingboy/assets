@@ -1,5 +1,5 @@
 (function() {
-  var People, people;
+  var People;
 
   People = (function() {
     function People(name) {
@@ -13,9 +13,5 @@
     return People;
 
   })();
-
-  people = new People('Tom');
-
-  people.echo();
 
 }).call(this);
