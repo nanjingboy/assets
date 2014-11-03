@@ -59,8 +59,8 @@ class Css extends AbstractCompiler
 
     protected static function _compile($srcFile, $distFile)
     {
-        if (copy($srcFile->getPathName(), $distFile->getPathName())) {
-            return self::_urlCompile($distFile->getPathName(), $srcFile->getPath());
+        if (copy($srcFile->getPathname(), $distFile->getPathname())) {
+            return self::_urlCompile($distFile->getPathname(), $srcFile->getPath());
         }
 
         return false;

@@ -8,9 +8,9 @@ class Scss extends Css
     protected static function _compile($srcFile, $distFile)
     {
         $command = 'scss --style compressed --no-cache --sourcemap=none '  .
-            $srcFile->getPathName() . ' ' . $distFile->getPathName();
+            $srcFile->getPathname() . ' ' . $distFile->getPathname();
         if (Shell::run($command) === true) {
-            return self::_urlCompile($distFile->getPathName(), $srcFile->getPath());
+            return self::_urlCompile($distFile->getPathname(), $srcFile->getPath());
         }
 
         return false;

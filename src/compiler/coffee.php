@@ -13,11 +13,11 @@ class Coffee extends AbstractCompiler
          * As CoffeeScript cli can't set a different file path with compile command,
          * so we have to compile the file in src directory path, and then move to the dist path
          */
-        $command = 'coffee --compile --no-header --bare ' . $srcFile->getPathName();
+        $command = 'coffee --compile --no-header --bare ' . $srcFile->getPathname();
         if (Shell::run($command) === true) {
             return rename(
-                rtrim($srcFile->getPathName(), $srcFile->getExtension()) . 'js',
-                $distFile->getPathName()
+                rtrim($srcFile->getPathname(), $srcFile->getExtension()) . 'js',
+                $distFile->getPathname()
             );
         }
 

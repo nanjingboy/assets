@@ -20,7 +20,7 @@ abstract class AbstractCompiler
 
         $srcFile = new SplFileInfo($file);
         $distFile = new SplFileInfo(
-            self::_getDistFilePath($srcFile->getPathName(), $srcFile->getMTime())
+            self::_getDistFilePath($srcFile->getPathname(), $srcFile->getMTime())
         );
         if (file_exists($distFile) === false) {
             if (file_exists($distFile->getPath()) === false) {
