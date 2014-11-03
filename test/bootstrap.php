@@ -10,3 +10,7 @@ Assets\Config::init(
 if (is_dir(__DIR__ . '/app/tmp')) {
     rmrdir(__DIR__ . '/app/tmp');
 }
+
+if (is_dir(__DIR__ . '/app/uglified')) {
+    rmrdir(__DIR__ . '/app/uglified');
+}
