@@ -2,7 +2,7 @@
     "name": "nanjingboy/assets",
     "type": "library",
     "description": "Assets Manager for PHP",
-    "keywords": ["assets", "concat", "uglify", "manager"],
+    "keywords": ["uglify", "javaScript", "coffeeScript", "css", "scss", "less"],
     "homepage": "https://github.com/nanjingboy/assets",
     "license": "MIT",
     "authors": [{
