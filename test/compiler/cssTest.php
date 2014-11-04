@@ -1,4 +1,7 @@
 <?php
+namespace Test\Compiler;
+
+use PHPUnit_Framework_TestCase;
 use Assets\Config;
 use Assets\Compiler\Css;
 

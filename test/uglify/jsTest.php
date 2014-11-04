@@ -1,4 +1,7 @@
 <?php
+namespace Test\Uglify;
+
+use PHPUnit_Framework_TestCase;
 use Assets\Config;
 use Assets\Uglify\Js;
 
