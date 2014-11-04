@@ -51,8 +51,8 @@ return array(
 
 * [image-url](https://github.com/nanjingboy/assets/blob/master/test/app/assets/stylesheets/home.scss#L23)
 * [font-url](https://github.com/nanjingboy/assets/blob/master/test/app/assets/stylesheets/home.scss#L17)
-* javascript_include_tag
-* stylesheet_include_tag
+* [javascript_include_tag](https://github.com/nanjingboy/assets/blob/master/assets.php#L4)
+* [stylesheet_include_tag](https://github.com/nanjingboy/assets/blob/master/assets.php#L21)
 
 ### Console Line:
 
