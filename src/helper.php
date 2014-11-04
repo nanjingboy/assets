@@ -19,11 +19,11 @@ class Helper
 
     public static function imageUrl($url)
     {
-        return self::assetUrl($url, Config::getImageDirectoryPath());
+        return self::assetUrl($url, Config::getImagesPath());
     }
 
     public static function fontUrl($url)
     {
-        return self::assetUrl($url, Config::getFontDirectoryPath());
+        return self::assetUrl($url, Config::getFontsPath());
     }
 }

@@ -10,9 +10,9 @@ trait Path
     private static function _getDirectory()
     {
         if (static::$_type === 'js') {
-            return Config::getJsDirectoryPath() . DIRECTORY_SEPARATOR;
+            return Config::getJavascriptsPath() . DIRECTORY_SEPARATOR;
         }
-        return Config::getCssDirectoryPath() . DIRECTORY_SEPARATOR;
+        return Config::getStylesheetsPath() . DIRECTORY_SEPARATOR;
     }
 
     private static function _getCompiledDirectory()

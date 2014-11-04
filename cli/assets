@@ -6,15 +6,20 @@ if (is_file(__DIR__ . '/../vendor/autoload.php')) {
     require __DIR__ . '/../../autoload.php';
 }
 
-function requireConfig($input)
+function init($input)
 {
-    $configPath = $input->getArgument('config');
-    if ($configPath === null) {
-        require __DIR__ . '/../configs/assets.php';
-    } else {
-        require $configPath;
+    $configFilePath = $input->getArgument('config');
+    if ($configFilePath === null) {
+        $env = getenv('ASSETS_ENV');
+        if (empty($env)) {
+            $env = 'development';
+        }
+        $configFilePath =  __DIR__ . "/../configs/{$env}/assets.php";
     }
+
+    \Assets\Config::init($configFilePath);
 }
+
 
 $commander = new Commander();
 $commander->name('assets')
@@ -22,16 +27,16 @@ $commander->name('assets')
     ->command(
         array(
             'name' => 'compile',
-            'description' => 'Compile a asset to JavaScript or Css file.',
+            'description' => 'Compile a asset file to JavaScript or Css file.',
             'arguments' => array(
                 array(
                     'name' => 'path',
-                    'description' => 'Path of the asset.',
+                    'description' => 'Path of the asset file.',
                     'mode' => Commander::ARGUMENT_REQUIRED
                 ),
                 array(
                     'name' => 'config',
-                    'description' => 'Path of the init config: a php script file.'
+                    'description' => 'Path of the config file.'
                 )
             ),
             'callback' => function($input, $output) {
@@ -39,7 +44,7 @@ $commander->name('assets')
                 if (file_exists($srcFile)) {
                     $type = $srcFile->getExtension();
                     if (in_array($type, array('css', 'scss', 'less', 'coffee'))) {
-                        requireConfig($input);
+                        init($input);
                         $srcFile = $srcFile->getRealPath();
                         $class = '\\Assets\\Compiler\\' . ucfirst($type);
                         $distFile = $class::compile($srcFile);

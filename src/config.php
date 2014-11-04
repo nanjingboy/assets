@@ -5,47 +5,52 @@ use AssetLoader;
 
 final class Config
 {
-    private static $_serverRootPath;
-    private static $_jsDirectoryPath;
-    private static $_cssDirectoryPath;
-    private static $_imageDirectoryPath;
-    private static $_fontDirectoryPath;
+    private static $_config;
 
-    public static function init($serverRootPath,
-        $jsDirectoryPath, $cssDirectoryPath,
-        $imageDirectoryPath, $fontDirectoryPath)
+    public static function init($configFilePath)
     {
-        self::$_serverRootPath = rtrim($serverRootPath, DIRECTORY_SEPARATOR);
-        self::$_jsDirectoryPath = rtrim($jsDirectoryPath, DIRECTORY_SEPARATOR);
-        self::$_cssDirectoryPath = rtrim($cssDirectoryPath, DIRECTORY_SEPARATOR);
-        self::$_imageDirectoryPath = rtrim($imageDirectoryPath, DIRECTORY_SEPARATOR);
-        self::$_fontDirectoryPath = rtrim($fontDirectoryPath, DIRECTORY_SEPARATOR);
+        $configFilePath = realpath($configFilePath);
+        if (!file_exists($configFilePath)) {
+            throw new ConfigException("can't load config from {$configFilePath}");
+        }
 
-        AssetLoader::init(self::$_serverRootPath, self::$_jsDirectoryPath, self::$_cssDirectoryPath);
+        $config = require($configFilePath);
+        $serverRoot = rtrim(realpath($config['path']['serverRoot']), DIRECTORY_SEPARATOR);
+        if ($serverRoot === false) {
+            throw new AssetsException('Error config for server root path.');
+        }
+
+        foreach ($config['path'] as $key => $path) {
+            if ($key === 'serverRoot') {
+                $path = $serverRoot;
+            } else {
+                $path = $serverRoot . DIRECTORY_SEPARATOR . trim($path, DIRECTORY_SEPARATOR);
+            }
+            $config['path'][$key] = $path;
+        }
+
+        AssetLoader::init(
+            $config['path']['serverRoot'],
+            $config['path']['javascripts'],
+            $config['path']['stylesheets']
+        );
+
+        self::$_config = $config;
     }
 
-    public static function getServerRootPath()
+    public static function __callStatic($method, $arguments)
     {
-        return self::$_serverRootPath;
-    }
+        $matches = array();
+        preg_match_all('/^get(([A-Z][a-z]+)+)Path$/', $method, $matches);
+        if (empty($matches[1][0])) {
+            throw new UndefinedMethodException(__CLASS__, $method);
+        }
 
-    public static function getJsDirectoryPath()
-    {
-        return self::$_jsDirectoryPath;
-    }
+        $key = lcfirst($matches[1][0]);
+        if (array_key_exists($key, self::$_config['path'])) {
+            return self::$_config['path'][$key];
+        }
 
-    public static function getCssDirectoryPath()
-    {
-        return self::$_cssDirectoryPath;
-    }
-
-    public static function getImageDirectoryPath()
-    {
-        return self::$_imageDirectoryPath;
-    }
-
-    public static function getFontDirectoryPath()
-    {
-        return self::$_fontDirectoryPath;
+        throw new UndefinedMethodException(__CLASS__, $method);
     }
 }
