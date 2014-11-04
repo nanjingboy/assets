@@ -24,12 +24,13 @@ trait Path
 
     private static function _getDistFilePath($srcFile, $lastModified)
     {
-        $distFile = trim(
-            str_replace(self::_getDirectory(), '', $srcFile),
-            DIRECTORY_SEPARATOR
-        ) . DIRECTORY_SEPARATOR;
+        $distFile = trim(str_replace(static::_getDirectory(), '', $srcFile), DIRECTORY_SEPARATOR);
         $fileNameWithoutExtension = implode('.', explode('.', $distFile, -1));
-        return self::_getCompiledDirectory() . $fileNameWithoutExtension . '_' .
+        if (empty($fileNameWithoutExtension)) {
+            $fileNameWithoutExtension = $distFile;
+        }
+
+        return static::_getCompiledDirectory() . $fileNameWithoutExtension . '_' .
             md5($lastModified) . '.' . static::$_type;
     }
 }
