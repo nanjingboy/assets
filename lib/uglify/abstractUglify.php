@@ -11,55 +11,51 @@ abstract class AbstractUglify
 
     protected static $_compiledDirName = 'uglified';
 
-    private static function _loadSrcFiles($file)
+    public static function loadSrcFiles($file)
     {
         if (static::$_type === 'js') {
             $files = AssetLoader::loadJs($file);
         } else {
-            $files = AssetLoader::loadCss($file);
+            $files = AssetLoader::loadCss($files);
         }
 
-        $result = array('files' => array(), 'hashes' => array());
         $serverRootPath = Config::getServerRootPath();
-        foreach ($files as $file) {
+        foreach ($files as $index => $file) {
             $fileInfo = new SplFileInfo("{$serverRootPath}{$file}");
             $compiler = ucfirst($fileInfo->getExtension());
             if (in_array($compiler, static::$_compilers)) {
                 $compiler = "\\Assets\\Compiler\\{$compiler}";
-                $compiledFilePath = $compiler::compile(
-                    $fileInfo->getPathName()
-                );
-                $filePath = $serverRootPath . $compiledFilePath;
-            } else {
-                $filePath = $serverRootPath . $file;
+                $files[$index] = $compiler::compile($fileInfo->getPathname());
             }
-            array_push($result['files'], $filePath);
-            array_push($result['hashes'], md5(filemtime($filePath)));
         }
 
-        return $result;
-
+        return $files;
     }
 
     public static function uglify($file)
     {
         $file = str_replace(self::_getDirectory(), '', $file);
-        $srcFiles = self::_loadSrcFiles($file);
-        if (empty($srcFiles['files'])) {
+        $srcFiles = static::loadSrcFiles($file);
+        if (empty($srcFiles)) {
             return false;
         }
 
-        $distFilePath = self::_getDistFilePath(
-            $file, implode('', $srcFiles['hashes'])
-        );
+        $hashes = array();
+        $serverRootPath = Config::getServerRootPath();
+        foreach ($srcFiles as $index => $srcFile) {
+            $srcFile = "{$serverRootPath}{$srcFile}";
+            $srcFiles[$index] = $srcFile;
+            array_push($hashes, md5(filemtime($srcFile)));
+        }
 
+        $distFilePath = self::_getDistFilePath($file, implode('', $hashes));
         if (file_exists($distFilePath) === false) {
             $distFile = new SplFileInfo($distFilePath);
             if (file_exists($distFile->getPath()) === false) {
                 mkdir($distFile->getPath(), 0774, true);
             }
 
-            if (static::_uglify($srcFiles['files'], $distFilePath) === false) {
+            if (static::_uglify($srcFiles, $distFilePath) === false) {
                 return false;
             }
         }
