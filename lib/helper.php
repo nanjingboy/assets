@@ -14,6 +14,10 @@ class Helper
             return array();
         }
 
+        if (preg_match('/^https:|http:/i', $file)) {
+            return array($file);
+        }
+
         $serverRootPath = Config::getServerRootPath();
         $file = ltrim($file, DIRECTORY_SEPARATOR) . '.' . $type;
 

@@ -1,7 +1,7 @@
 <?php
 use Assets\Helper;
 
-function javascript_include_tag($file)
+function javascript_include_tag($file, $echo = false)
 {
     $includes = array();
     $files = Helper::includeAsset($file, 'js');
@@ -9,10 +9,16 @@ function javascript_include_tag($file)
         array_push($includes, "<script src='{$file}'></script>");
     }
 
-    return $includes;
+    if ($echo === false) {
+        return $includes;
+    }
+
+    foreach ($includes as $include) {
+        echo "{$include}\n";
+    }
 }
 
-function stylesheet_include_tag($file)
+function stylesheet_include_tag($file, $echo = false)
 {
     $includes = array();
     $files = Helper::includeAsset($file, 'css');
@@ -20,5 +26,11 @@ function stylesheet_include_tag($file)
         array_push($includes, "<link href='{$file}' media='screen' rel='stylesheet'/>");
     }
 
-    return $includes;
+    if ($echo === false) {
+        return $includes;
+    }
+
+    foreach ($includes as $include) {
+        echo "{$include}\n";
+    }
 }
