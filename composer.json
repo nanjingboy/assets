@@ -15,8 +15,7 @@
         "nanjingboy/commander": ">=0.1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*",
-        "perchten/rmrdir": "1.0.2"
+        "phpunit/phpunit": "3.7.*"
     },
     "config": {
         "bin-dir": "bin/"

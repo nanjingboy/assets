@@ -1,6 +1,9 @@
 <?php
 namespace Assets;
 
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+
 class Helper
 {
     public static function assetUrl($url, $baseDir)
@@ -25,5 +28,32 @@ class Helper
     public static function fontUrl($url)
     {
         return self::assetUrl($url, Config::getFontsPath());
+    }
+
+    /**
+     * remove file or directory(with recursive)
+     */
+    public static function removePath($path)
+    {
+        if (is_dir($path)) {
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($path),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+            foreach ($files as $file) {
+                if (in_array($file->getBasename(), array('.', '..'))) {
+                    continue;
+                }
+                if ($file->isDir()) {
+                    rmdir($file->getPathname());
+                } else {
+                    unlink($file->getPathname());
+                }
+            }
+
+            return rmdir($path);
+        }
+
+        return (file_exists($path) ? unlink($path) : true);
     }
 }
