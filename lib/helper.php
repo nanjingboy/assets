@@ -1,11 +1,46 @@
 <?php
 namespace Assets;
 
+use Assets\Uglify\Js;
+use Assets\Uglify\Css;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 
 class Helper
 {
+    public static function includeAsset($file, $type)
+    {
+        if ($type !== 'js' && $type !== 'css') {
+            return array();
+        }
+
+        $serverRootPath = Config::getServerRootPath();
+        $file = ltrim($file, DIRECTORY_SEPARATOR) . '.' . $type;
+
+        if (Config::isPrecompileEnable()) {
+            $compiledCacheFile = $serverRootPath . DIRECTORY_SEPARATOR . '.assetsrc';
+            if (file_exists($compiledCacheFile)) {
+                $compiledCaches = unserialize(file_get_contents($compiledCacheFile));
+                if (!empty($compiledCaches[$file])) {
+                    return array($compiledCaches[$file]);
+                }
+            }
+
+            if ($type === 'js') {
+                $distFile = Js::uglify($file);
+            } else {
+                $distFile = Css::uglify($file);
+            }
+            return ($distFile === false ? array() : array($distFile));
+        }
+
+        if ($type === 'js') {
+            return Js::loadSrcFiles($file);
+        } else {
+            return Css::loadSrcFiles($file);
+        }
+    }
+
     public static function assetUrl($url, $baseDir)
     {
         if (preg_match('/^https:|http:|data:/i', $url)) {
