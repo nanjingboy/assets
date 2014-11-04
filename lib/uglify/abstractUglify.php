@@ -16,7 +16,7 @@ abstract class AbstractUglify
         if (static::$_type === 'js') {
             $files = AssetLoader::loadJs($file);
         } else {
-            $files = AssetLoader::loadCss($files);
+            $files = AssetLoader::loadCss($file);
         }
 
         $serverRootPath = Config::getServerRootPath();
