@@ -2,7 +2,6 @@
 namespace Assets\Uglify;
 
 use Assets\Shell;
-use Assets\Config;
 
 class Js extends AbstractUglify
 {
