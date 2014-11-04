@@ -74,6 +74,7 @@ $commander->name('assets')
                 $precompileFiles = Config::getPrecompile();
                 $serverRootPath = Config::getServerRootPath();
                 foreach ($precompileFiles as $precompileFile) {
+                    $precompileFile = ltrim($precompileFile, DIRECTORY_SEPARATOR);
                     $file = new SplFileInfo($precompileFile);
                     $extName = strtolower($file->getExtension());
                     if (empty($extName) || in_array($extName, array('js', 'css')) === false) {
