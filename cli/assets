@@ -61,7 +61,7 @@ $commander->name('assets')
     ->command(
         array(
             'name' => 'precompile',
-            'description' => 'Compile all the assets named in $config["precompile"]',
+            'description' => 'Compile all the assets named in $config["precompile"]["files"]',
             'arguments' => array(
                 array(
                     'name' => 'config',
