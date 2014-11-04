@@ -6,6 +6,11 @@ if (is_file(__DIR__ . '/../vendor/autoload.php')) {
     require __DIR__ . '/../../autoload.php';
 }
 
+use Assets\Config;
+use Assets\Helper;
+use Assets\Uglify\Js;
+use Assets\Uglify\Css;
+
 function init($input)
 {
     $configFilePath = $input->getArgument('config');
@@ -17,43 +22,83 @@ function init($input)
         $configFilePath =  __DIR__ . "/../configs/{$env}/assets.php";
     }
 
-    \Assets\Config::init($configFilePath);
+    Config::init($configFilePath);
 }
-
 
 $commander = new Commander();
 $commander->name('assets')
     ->version('0.1.0')
     ->command(
         array(
-            'name' => 'compile',
-            'description' => 'Compile a asset file to JavaScript or Css file.',
+            'name' => 'clean',
+            'description' => 'Remove old compiled assets',
             'arguments' => array(
                 array(
-                    'name' => 'path',
-                    'description' => 'Path of the asset file.',
-                    'mode' => Commander::ARGUMENT_REQUIRED
-                ),
-                array(
                     'name' => 'config',
-                    'description' => 'Path of the config file.'
+                    'description' => 'Path of the config file'
                 )
             ),
             'callback' => function($input, $output) {
-                $srcFile = new SplFileInfo($input->getArgument('path'));
-                if (file_exists($srcFile)) {
-                    $type = $srcFile->getExtension();
-                    if (in_array($type, array('css', 'scss', 'less', 'coffee'))) {
-                        init($input);
-                        $srcFile = $srcFile->getRealPath();
-                        $class = '\\Assets\\Compiler\\' . ucfirst($type);
-                        $distFile = $class::compile($srcFile);
-                        if ($distFile === false) {
-                            $output->writeln("<error>Can't compile file:{$srcFile}</error>");
-                        } else {
-                            $output->writeln("<info>Create file to</info>:{$distFile}");
-                        }
+                init($input);
+                $serverRootPath = Config::getServerRootPath();
+                $javascriptsRelativePath = ltrim(
+                    str_replace($serverRootPath, '', Config::getJavascriptsPath()),
+                    DIRECTORY_SEPARATOR
+                );
+                $stylesheetsRelativePath = ltrim(
+                    str_replace($serverRootPath, '', Config::getStylesheetsPath()),
+                    DIRECTORY_SEPARATOR
+                );
+
+                $serverRootPath = $serverRootPath . DIRECTORY_SEPARATOR;
+                Helper::removePath($serverRootPath . 'uglified');
+                Helper::removePath($serverRootPath . '.assetsrc');
+                Helper::removePath($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . $javascriptsRelativePath);
+                Helper::removePath($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . $stylesheetsRelativePath);
+            }
+        )
+    )
+    ->command(
+        array(
+            'name' => 'precompile',
+            'description' => 'Compile all the assets named in $config["precompile"]',
+            'arguments' => array(
+                array(
+                    'name' => 'config',
+                    'description' => 'Path of the config file'
+                )
+            ),
+            'callback' => function($input, $output) {
+                init($input);
+                $compiledFiles = array();
+                $precompileFiles = Config::getPrecompile();
+                $serverRootPath = Config::getServerRootPath();
+                foreach ($precompileFiles as $precompileFile) {
+                    $file = new SplFileInfo($precompileFile);
+                    $extName = strtolower($file->getExtension());
+                    if (empty($extName) || in_array($extName, array('js', 'css')) === false) {
+                        continue;
                     }
+
+                    if ($extName === 'js') {
+                        $distFile = Js::uglify($precompileFile);
+                    } else {
+                        $distFile = Css::uglify($precompileFile);
+                    }
+
+                    if ($distFile === false) {
+                        $output->writeln("<error>Can't compile file : {$precompileFile}</error>");
+                    } else {
+                        $compiledFiles[$precompileFile] = $distFile;
+                        $output->writeln('<info>Create file</info> : ' . $serverRootPath . $distFile);
+                    }
+                }
+
+                if (!empty($compiledFiles)) {
+                    file_put_contents(
+                        $serverRootPath . DIRECTORY_SEPARATOR . '.assetsrc',
+                        serialize($compiledFiles)
+                    );
                 }
             }
         )

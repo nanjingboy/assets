@@ -38,6 +38,29 @@ final class Config
         self::$_config = $config;
     }
 
+    public static function isPrecompileEnable()
+    {
+        if (empty(self::$_config['precompile'])) {
+            return false;
+        }
+
+        $precompile = self::$_config['precompile'];
+        if (array_key_exists('enable', $precompile) && $precompile['enable'] === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function getPrecompile()
+    {
+        if (static::isPrecompileEnable() === false || empty(self::$_config['precompile']['files'])) {
+            return array();
+        }
+
+        return self::$_config['precompile']['files'];
+    }
+
     public static function __callStatic($method, $arguments)
     {
         $matches = array();

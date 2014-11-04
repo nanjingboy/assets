@@ -6,5 +6,8 @@ return array(
         'stylesheets' => 'assets/stylesheets',
         'images' => 'assets/images',
         'fonts' => 'assets/fonts'
+    ),
+    'precompile' => array(
+        'files' => array('base.js', 'home.css')
     )
 );
