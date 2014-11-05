@@ -19,7 +19,8 @@ function init($input)
         if (empty($env)) {
             $env = 'development';
         }
-        $configFilePath =  __DIR__ . "/../configs/{$env}/assets.php";
+
+        $configFilePath = getcwd() . "/configs/{$env}/assets.php";
     }
 
     Config::init($configFilePath);
