@@ -35,15 +35,12 @@ If you don't use coffeeScript, sass or less, you don't have to install coffeeScr
 return array(
     'path' => array(
         'serverRoot' => string,
-        'javascripts' => string, // relative to the serverRoot path
-        'stylesheets' => string, // relative to the serverRoot path
-        'images' => string, // relative to the serverRoot path
-        'fonts' => string // relative to the serverRoot path
+        'javascripts' => string, // relative to serverRoot path
+        'stylesheets' => string, // relative to serverRoot path
+        'images' => string, // relative to serverRoot path
+        'fonts' => string // relative to serverRoot path
     ),
-    'precompile' => array(
-        'enable' => boolean, // default value is true
-        'files' => array() // the file's must is js or css, and it's relative to the javascripts(stylesheets) path
-    )
+    'precompile' => array() // the file's extension must be js or css, and it's relative to root javascripts(stylesheets) path
 );
 ```
 

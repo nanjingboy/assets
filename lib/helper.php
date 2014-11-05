@@ -21,7 +21,7 @@ class Helper
         $serverRootPath = Config::getServerRootPath();
         $file = ltrim($file, DIRECTORY_SEPARATOR) . '.' . $type;
 
-        if (Config::isPrecompileEnable()) {
+        if (Config::isPrecompileable()) {
             $compiledCacheFile = $serverRootPath . DIRECTORY_SEPARATOR . '.assetsrc';
             if (file_exists($compiledCacheFile)) {
                 $compiledCaches = unserialize(file_get_contents($compiledCacheFile));

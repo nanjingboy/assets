@@ -7,7 +7,5 @@ return array(
         'images' => 'assets/images',
         'fonts' => 'assets/fonts'
     ),
-    'precompile' => array(
-        'files' => array('base.js', 'home.css')
-    )
+    'precompile' => array('base.js', 'home.css')
 );
