@@ -26,6 +26,25 @@ function init($input)
     Config::init($configFilePath);
 }
 
+function clean()
+{
+    $serverRootPath = Config::getServerRootPath();
+    $javascriptsRelativePath = ltrim(
+        str_replace($serverRootPath, '', Config::getJavascriptsPath()),
+        DIRECTORY_SEPARATOR
+    );
+    $stylesheetsRelativePath = ltrim(
+        str_replace($serverRootPath, '', Config::getStylesheetsPath()),
+        DIRECTORY_SEPARATOR
+    );
+
+    $serverRootPath = $serverRootPath . DIRECTORY_SEPARATOR;
+    Helper::removePath($serverRootPath . 'uglified');
+    Helper::removePath($serverRootPath . '.assetsrc');
+    Helper::removePath($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . $javascriptsRelativePath);
+    Helper::removePath($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . $stylesheetsRelativePath);
+}
+
 $commander = new Commander();
 $commander->name('assets')
     ->version('0.1.0')
@@ -41,21 +60,7 @@ $commander->name('assets')
             ),
             'callback' => function($input, $output) {
                 init($input);
-                $serverRootPath = Config::getServerRootPath();
-                $javascriptsRelativePath = ltrim(
-                    str_replace($serverRootPath, '', Config::getJavascriptsPath()),
-                    DIRECTORY_SEPARATOR
-                );
-                $stylesheetsRelativePath = ltrim(
-                    str_replace($serverRootPath, '', Config::getStylesheetsPath()),
-                    DIRECTORY_SEPARATOR
-                );
-
-                $serverRootPath = $serverRootPath . DIRECTORY_SEPARATOR;
-                Helper::removePath($serverRootPath . 'uglified');
-                Helper::removePath($serverRootPath . '.assetsrc');
-                Helper::removePath($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . $javascriptsRelativePath);
-                Helper::removePath($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . $stylesheetsRelativePath);
+                clean();
             }
         )
     )
@@ -71,6 +76,7 @@ $commander->name('assets')
             ),
             'callback' => function($input, $output) {
                 init($input);
+                clean();
                 $compiledFiles = array();
                 $precompileFiles = Config::getPrecompile();
                 $serverRootPath = Config::getServerRootPath();
