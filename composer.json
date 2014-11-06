@@ -22,7 +22,7 @@
     },
     "bin": ["cli/assets"],
     "autoload": {
-        "classmap": ["lib/"],
+        "classmap": ["lib/", "cli/"],
         "files": ["assets.php"]
     }
 }
