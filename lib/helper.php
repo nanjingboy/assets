@@ -1,6 +1,8 @@
 <?php
 namespace Assets;
 
+use SplFileInfo;
+use AssetLoader;
 use Assets\Uglify\Js;
 use Assets\Uglify\Css;
 use RecursiveIteratorIterator;
@@ -38,11 +40,34 @@ class Helper
             return ($distFile === false ? array() : array($distFile));
         }
 
-        if ($type === 'js') {
-            return Js::loadSrcFiles($file);
-        } else {
-            return Css::loadSrcFiles($file);
+        return static::loadCompiledFiles($file, $type);
+    }
+
+    public static function loadCompiledFiles($file, $type)
+    {
+        if ($type !== 'js' && $type !== 'css') {
+            return array();
         }
+
+        if ($type === 'js') {
+            $compilers = array('Coffee');
+            $files = AssetLoader::loadJs($file);
+        } else if ($type === 'css') {
+            $compilers = array('Css', 'Scss', 'Less');
+            $files = AssetLoader::loadCss($file);
+        }
+
+        $serverRootPath = Config::getServerRootPath();
+        foreach ($files as $index => $file) {
+            $fileInfo = new SplFileInfo("{$serverRootPath}{$file}");
+            $compiler = ucfirst($fileInfo->getExtension());
+            if (in_array($compiler, $compilers)) {
+                $compiler = "\\Assets\\Compiler\\{$compiler}";
+                $files[$index] = $compiler::compile($fileInfo->getPathname());
+            }
+        }
+
+        return $files;
     }
 
     public static function assetUrl($url, $baseDir)

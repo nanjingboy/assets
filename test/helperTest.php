@@ -3,6 +3,26 @@ use Assets\Helper;
 
 class HelperTest extends PHPUnit_Framework_TestCase
 {
+    public function testLoadCompiledFiles()
+    {
+        $this->assertEquals(
+            array(
+                '/tmp/assets/users_people_6baefd0e20cdae331f3debebc5cd19e7.js',
+                '/assets/javascripts/base.js'
+            ),
+            Helper::loadCompiledFiles('base', 'js')
+        );
+
+        $this->assertEquals(
+            array(
+                '/tmp/assets/url_replace_6baefd0e20cdae331f3debebc5cd19e7.css',
+                '/tmp/assets/users_base_6baefd0e20cdae331f3debebc5cd19e7.css',
+                '/tmp/assets/home_eedb46782cc1f9b1da2ee8145fdecebf.css'
+            ),
+            Helper::loadCompiledFiles('home', 'css')
+        );
+    }
+
     public function testImageUrl()
     {
         $this->assertEquals(

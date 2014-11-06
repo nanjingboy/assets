@@ -2,7 +2,7 @@
 namespace Assets\Uglify;
 
 use SplFileInfo;
-use AssetLoader;
+use Assets\Helper;
 use Assets\Config;
 
 abstract class AbstractUglify
@@ -11,31 +11,10 @@ abstract class AbstractUglify
 
     protected static $_compiledDir = 'uglified';
 
-    public static function loadSrcFiles($file)
-    {
-        if (static::$_type === 'js') {
-            $files = AssetLoader::loadJs($file);
-        } else {
-            $files = AssetLoader::loadCss($file);
-        }
-
-        $serverRootPath = Config::getServerRootPath();
-        foreach ($files as $index => $file) {
-            $fileInfo = new SplFileInfo("{$serverRootPath}{$file}");
-            $compiler = ucfirst($fileInfo->getExtension());
-            if (in_array($compiler, static::$_compilers)) {
-                $compiler = "\\Assets\\Compiler\\{$compiler}";
-                $files[$index] = $compiler::compile($fileInfo->getPathname());
-            }
-        }
-
-        return $files;
-    }
-
     public static function uglify($file)
     {
         $file = str_replace(self::_getBaseDir(), '', $file);
-        $srcFiles = static::loadSrcFiles($file);
+        $srcFiles = Helper::loadCompiledFiles($file, static::$_type);
         if (empty($srcFiles)) {
             return false;
         }
