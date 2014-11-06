@@ -1,13 +1,14 @@
 <?php
 namespace Assets\Concerns;
 
+use SplFileInfo;
 use Assets\Config;
 
 trait Path
 {
     protected static $_type;
 
-    private static function _getDirectory()
+    private static function _getBaseDir()
     {
         if (static::$_type === 'js') {
             return Config::getJavascriptsPath() . DIRECTORY_SEPARATOR;
@@ -15,22 +16,34 @@ trait Path
         return Config::getStylesheetsPath() . DIRECTORY_SEPARATOR;
     }
 
-    private static function _getCompiledDirectory()
+    private static function _getCompiledDir()
     {
-        $serverRootPath = rtrim(Config::getServerRootPath(), DIRECTORY_SEPARATOR);
-        $directory =  str_replace($serverRootPath, '', self::_getDirectory());
-        return $serverRootPath . DIRECTORY_SEPARATOR . static::$_compiledDirName . $directory;
+        return Config::getServerRootPath() . DIRECTORY_SEPARATOR .
+            static::$_compiledDir . DIRECTORY_SEPARATOR . 'assets';
     }
 
     private static function _getDistFilePath($srcFile, $lastModified)
     {
-        $distFile = trim(str_replace(static::_getDirectory(), '', $srcFile), DIRECTORY_SEPARATOR);
-        $fileNameWithoutExtension = implode('.', explode('.', $distFile, -1));
-        if (empty($fileNameWithoutExtension)) {
-            $fileNameWithoutExtension = $distFile;
-        }
+        $distFile = new SplFileInfo(
+            trim(
+                str_replace(
+                    self::_getBaseDir(),
+                    '',
+                    $srcFile
+                ),
+                DIRECTORY_SEPARATOR
+            )
+        );
 
-        return static::_getCompiledDirectory() . $fileNameWithoutExtension . '_' .
-            md5($lastModified) . '.' . static::$_type;
+        $path = str_replace(DIRECTORY_SEPARATOR, '_', $distFile->getPath());
+        $baseName = $distFile->getBasename('.' . $distFile->getExtension());
+        if (!empty($path)) {
+            $distFile = $path . '_' . $baseName;
+        } else {
+            $distFile = $baseName;
+        }
+        $distFile = $distFile . '_' . md5($lastModified) . '.' . static::$_type;
+
+        return self::_getCompiledDir() . DIRECTORY_SEPARATOR . $distFile;
     }
 }

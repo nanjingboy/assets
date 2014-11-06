@@ -9,7 +9,7 @@ abstract class AbstractUglify
 {
     use \Assets\Concerns\Path;
 
-    protected static $_compiledDirName = 'uglified';
+    protected static $_compiledDir = 'uglified';
 
     public static function loadSrcFiles($file)
     {
@@ -34,7 +34,7 @@ abstract class AbstractUglify
 
     public static function uglify($file)
     {
-        $file = str_replace(self::_getDirectory(), '', $file);
+        $file = str_replace(self::_getBaseDir(), '', $file);
         $srcFiles = static::loadSrcFiles($file);
         if (empty($srcFiles)) {
             return false;

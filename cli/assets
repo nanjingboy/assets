@@ -28,21 +28,11 @@ function init($input)
 
 function clean()
 {
-    $serverRootPath = Config::getServerRootPath();
-    $javascriptsRelativePath = ltrim(
-        str_replace($serverRootPath, '', Config::getJavascriptsPath()),
-        DIRECTORY_SEPARATOR
-    );
-    $stylesheetsRelativePath = ltrim(
-        str_replace($serverRootPath, '', Config::getStylesheetsPath()),
-        DIRECTORY_SEPARATOR
-    );
-
-    $serverRootPath = $serverRootPath . DIRECTORY_SEPARATOR;
-    Helper::removePath($serverRootPath . 'uglified');
-    Helper::removePath($serverRootPath . '.assetsrc');
-    Helper::removePath($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . $javascriptsRelativePath);
-    Helper::removePath($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . $stylesheetsRelativePath);
+    $serverRoot = Config::getServerRootPath();
+    Helper::removePath($serverRoot . DIRECTORY_SEPARATOR . 'uglified');
+    Helper::removePath($serverRoot . DIRECTORY_SEPARATOR . '.assetsrc');
+    Helper::removePath($serverRoot . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'assets');
+    Helper::removePath($serverRoot . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'assets');
 }
 
 $commander = new Commander();

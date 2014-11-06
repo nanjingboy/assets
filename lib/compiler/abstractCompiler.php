@@ -8,11 +8,11 @@ abstract class AbstractCompiler
 {
     use \Assets\Concerns\Path;
 
-    protected static $_compiledDirName = 'tmp';
+    protected static $_compiledDir = 'tmp';
 
     public static function compile($file)
     {
-        $baseDir = self::_getDirectory();
+        $baseDir = self::_getBaseDir();
         $file = $baseDir . str_replace($baseDir, '', $file);
         if (file_exists($file) === false) {
             return false;
