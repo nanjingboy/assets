@@ -44,4 +44,13 @@ class HelperTest extends PHPUnit_Framework_TestCase
             Helper::assetUrl('banner.png', $baseDir)
         );
     }
+
+    public function testRemovePath()
+    {
+        $dir = Config::getServerRootPath() . DIRECTORY_SEPARATOR . 'remove' .
+            DIRECTORY_SEPARATOR . 'directory' . DIRECTORY_SEPARATOR . 'recursive';
+        mkdir($dir, 0777, true);
+        $this->assertTrue(Helper::removePath($dir));
+        $this->assertFalse(file_exists($dir));
+    }
 }
