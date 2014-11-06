@@ -19,21 +19,14 @@ abstract class AbstractUglify
         }
 
         $serverRootPath = Config::getServerRootPath();
-        $compiledBaseDir = $serverRootPath . DIRECTORY_SEPARATOR . 'tmp' .
-            DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR;
-
         $result = array('files' => array(), 'hashes' => array());
         foreach ($compiledFiles as $compiledFile) {
             $compiledFile = "{$serverRootPath}{$compiledFile}";
-            $uglifiedFile = str_replace(
-                array(self::_getBaseDir() ,$compiledBaseDir), '', $compiledFile
-            );
-            $uglifiedFile = $compiledBaseDir . $uglifiedFile . '.min.' .
-                md5(filemtime($compiledFile)) . '.' . static::$_type;
-            if (file_exists($uglifiedFile) === false) {
-                if (static::_uglify(array($compiledFile), $uglifiedFile)) {
-                    array_push($result['files'], $uglifiedFile);
-                    array_push($result['hashes'], md5(filemtime($uglifiedFile)));
+            $minFile = static::parseMinFilePath($compiledFile);
+            if (file_exists($minFile) === false) {
+                if (static::_uglify(array($compiledFile), $minFile)) {
+                    array_push($result['files'], $minFile);
+                    array_push($result['hashes'], md5(filemtime($minFile)));
                     continue;
                 }
             }
@@ -43,6 +36,17 @@ abstract class AbstractUglify
         }
 
         return $result;
+    }
+
+    public static function parseMinFilePath($srcFile)
+    {
+        $serverRootPath = Config::getServerRootPath();
+        $compiledBaseDir = $serverRootPath . DIRECTORY_SEPARATOR . 'tmp' .
+            DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR;
+        $srcFile = $serverRootPath . str_replace($serverRootPath, '', $srcFile);
+        $minFile = str_replace(array(self::_getBaseDir(), $compiledBaseDir), '', $srcFile);
+        return $compiledBaseDir . $minFile . '.min.' . md5(filemtime($srcFile)) . '.' . static::$_type;
+
     }
 
     public static function uglify($file)

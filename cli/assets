@@ -27,7 +27,7 @@ $commander->name('assets')
     ->command(
         array(
             'name' => 'precompile',
-            'description' => 'Compile all the assets named in $config["precompile"]["files"]',
+            'description' => 'Compile all the assets named in $config["precompile"]',
             'arguments' => array(
                 array(
                     'name' => 'config',
@@ -36,6 +36,21 @@ $commander->name('assets')
             ),
             'callback' => function($input, $output) {
                 \Assets\Console::precompile($input, $output);
+            }
+        )
+    )
+    ->command(
+        array(
+            'name' => 'cleanup-tmp',
+            'description' => 'Remove unuseful files in tmp/assets directory',
+            'arguments' => array(
+                array(
+                    'name' => 'config',
+                    'description' => 'Path of the config file'
+                )
+            ),
+            'callback' => function($input, $output) {
+                \Assets\Console::cleanupTmp($input, $output);
             }
         )
     )

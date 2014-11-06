@@ -33,6 +33,72 @@ class Console
         Helper::removePath($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . 'assets');
     }
 
+    public static function cleanupTmp(InputInterface $input, OutputInterface $output)
+    {
+        self::_initConfig($input);
+
+        $serverRootPath = Config::getServerRootPath();
+        $tmpDir = $serverRootPath . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'assets';
+        if (file_exists($tmpDir) === false || is_dir($tmpDir) === false) {
+            return true;
+        }
+
+        $files = array();
+        foreach (scandir($tmpDir) as $file) {
+            if ($file !== '.' && $file !== '..') {
+                array_push($files, $tmpDir . DIRECTORY_SEPARATOR . $file);
+            }
+        }
+        if (empty($files)) {
+            return true;
+        }
+
+
+        $precompileFiles = Config::getPrecompile();
+        if (empty($precompileFiles)) {
+            return true;
+        }
+
+        $usefulFiles = array();
+        foreach ($precompileFiles as $precompileFile) {
+            $parts = explode('.', $precompileFile);
+            if (count($parts) < 2) {
+                continue;
+            }
+
+            $type = strtolower($parts[1]);
+            if ($type !== 'js' && $type !== 'css') {
+                continue;
+            }
+
+            $compiledFiles = Helper::loadCompiledFiles($parts[0], $type);
+            if (empty($compiledFiles)) {
+                continue;
+            }
+
+            $uglifyClass = '\\Assets\\Uglify\\' . ucfirst($type);
+            foreach ($compiledFiles as $compiledFile) {
+                $compiledFile = $serverRootPath . $compiledFile;
+                if (file_exists($compiledFile)) {
+                    array_push($usefulFiles, $compiledFile);
+                }
+
+                $minFile = $uglifyClass::parseMinFilePath($compiledFile);
+                if (file_exists($minFile)) {
+                    array_push($usefulFiles, $minFile);
+                }
+            }
+        }
+
+        $unusefulFiles = array_diff($files, $usefulFiles);
+        foreach ($unusefulFiles as $unusefulFile) {
+            if (unlink($unusefulFile)) {
+                $output->writeln('<info>Remove unuseful file</info> : ' . $unusefulFile);
+            }
+        }
+    }
+
+
     public static function precompile(InputInterface $input, OutputInterface $output)
     {
         self::_initConfig($input);
