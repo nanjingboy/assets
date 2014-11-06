@@ -19,17 +19,18 @@ Assets is a assets manager for PHP.
 ```
 * Install it via [composer](https://getcomposer.org/doc/00-intro.md)
 
-### Dependencies:
+* Create directories in root directory of your application:
 
-If you don't use coffeeScript, sass or less, you don't have to install coffeeScript, sass or less compiler.
+```shell
+ $ mkdir tmp/assets -p
+ $ chmod -R a+w tmp
 
-* [CoffeeScript](http://coffeescript.org/)
-* [Sass](http://sass-lang.com/)
-* [Less](http://lesscss.org/)
-* [uglifyjs](https://github.com/mishoo/UglifyJS2)
-* [uglifycss](https://github.com/fmarcia/UglifyCSS)
+ $ mkdir uglified/assets -p
+ $ chmod -R a+w uglified
+```
 
-### Config:
+* Create configs/$assetEnv/assets.php in root directory of your application($assetEnv is environment value named `ASSETS_ENV`):
+
 ```php
 <?php
 return array(
@@ -44,12 +45,30 @@ return array(
 );
 ```
 
+* Init the config in your bootstrap.php:
+
+```php
+<?php
+\Assets\Config::init($configFilePath);
+```
+
+### Dependencies:
+
+If you don't use coffeeScript, sass or less, you don't have to install coffeeScript, sass or less compiler.
+
+* [CoffeeScript](http://coffeescript.org/)
+* [Sass](http://sass-lang.com/)
+* [Less](http://lesscss.org/)
+* [uglifyjs](https://github.com/mishoo/UglifyJS2)
+* [uglifycss](https://github.com/fmarcia/UglifyCSS)
+
+
 ### Api:
 
 * [image-url](https://github.com/nanjingboy/assets/blob/master/test/app/assets/stylesheets/home.scss#L23)
 * [font-url](https://github.com/nanjingboy/assets/blob/master/test/app/assets/stylesheets/home.scss#L17)
 * [javascript_include_tag](https://github.com/nanjingboy/assets/blob/master/assets.php#L4)
-* [stylesheet_include_tag](https://github.com/nanjingboy/assets/blob/master/assets.php#L21)
+* [stylesheet_include_tag](https://github.com/nanjingboy/assets/blob/master/assets.php#L15)
 
 ### Console Line:
 
@@ -72,11 +91,11 @@ Options:
 
 Available commands:
   clean        Remove old compiled assets
+  cleanup-tmp   Remove unuseful files in tmp/assets directory
   help         Displays help for a command
   list         Lists commands
-  precompile   Compile all the assets named in $config["precompile"]["files"]
+  precompile   Compile all the assets named in $config["precompile"]
 ```
-
 
 ### Example:
 
