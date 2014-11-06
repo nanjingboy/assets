@@ -60,7 +60,28 @@ class Console
         }
 
         if (!empty($compiledFiles)) {
-            file_put_contents($serverRootPath . DIRECTORY_SEPARATOR . '.assetsrc', serialize($compiledFiles));
+            file_put_contents(
+                $serverRootPath . DIRECTORY_SEPARATOR . '.assetsrc',
+                serialize($compiledFiles)
+            );
+        }
+
+        $uglifiedPath = DIRECTORY_SEPARATOR . 'uglified' . DIRECTORY_SEPARATOR . 'assets';
+        $files = scandir($serverRootPath . $uglifiedPath);
+        foreach ($files as $file) {
+            if ($file === '.' || $file === '..') {
+                continue;
+            }
+
+            $file = $uglifiedPath . DIRECTORY_SEPARATOR . $file;
+            if (in_array($file, $compiledFiles)) {
+                continue;
+            }
+
+            $file = $serverRootPath . $file;
+            if (unlink($file)) {
+                $output->writeln('<info>Remove unuseful file</info> : ' . $file);
+            }
         }
     }
 }
