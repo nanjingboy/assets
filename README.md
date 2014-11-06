@@ -62,13 +62,15 @@ If you don't use coffeeScript, sass or less, you don't have to install coffeeScr
 * [uglifyjs](https://github.com/mishoo/UglifyJS2)
 * [uglifycss](https://github.com/fmarcia/UglifyCSS)
 
-
 ### Api:
 
 * [image-url](https://github.com/nanjingboy/assets/blob/master/test/app/assets/stylesheets/home.scss#L23)
 * [font-url](https://github.com/nanjingboy/assets/blob/master/test/app/assets/stylesheets/home.scss#L17)
 * [javascript_include_tag](https://github.com/nanjingboy/assets/blob/master/assets.php#L4)
 * [stylesheet_include_tag](https://github.com/nanjingboy/assets/blob/master/assets.php#L15)
+
+### require & require_dir directives:
+Get more details about require & require_dir directives in javascript(css) file from: [assetloader](https://github.com/nanjingboy/assetloader#usage)
 
 ### Console Line:
 
@@ -91,7 +93,7 @@ Options:
 
 Available commands:
   clean        Remove old compiled assets
-  cleanup-tmp   Remove unuseful files in tmp/assets directory
+  cleanup-tmp  Remove unuseful files in tmp/assets directory
   help         Displays help for a command
   list         Lists commands
   precompile   Compile all the assets named in $config["precompile"]
