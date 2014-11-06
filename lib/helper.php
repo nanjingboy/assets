@@ -88,10 +88,7 @@ class Helper
         return self::assetUrl($url, Config::getFontsPath());
     }
 
-    /**
-     * remove file or directory(with recursive)
-     */
-    public static function removePath($path)
+    public static function emptyDirectory($path)
     {
         if (is_dir($path)) {
             $files = new RecursiveIteratorIterator(
@@ -108,10 +105,9 @@ class Helper
                     unlink($file->getPathname());
                 }
             }
-
-            return rmdir($path);
+            return true;
         }
 
-        return (file_exists($path) ? unlink($path) : true);
+        return false;
     }
 }

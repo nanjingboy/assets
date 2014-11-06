@@ -1,5 +1,5 @@
 <?php
 Assets\Config::init(__DIR__ . '/configs/test/assets.php');
 
-Assets\Helper::removePath(__DIR__ . '/app/tmp');
-Assets\Helper::removePath(__DIR__ . '/app/uglified');
+Assets\Helper::emptyDirectory(__DIR__ . '/app/tmp/assets');
+Assets\Helper::emptyDirectory(__DIR__ . '/app/uglified/assets');

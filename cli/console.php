@@ -28,9 +28,11 @@ class Console
     {
         self::_initConfig($input);
         $serverRootPath = Config::getServerRootPath() . DIRECTORY_SEPARATOR;
-        Helper::removePath($serverRootPath . '.assetsrc');
-        Helper::removePath($serverRootPath . 'uglified');
-        Helper::removePath($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . 'assets');
+        if (file_exists($serverRootPath . '.assetsrc')) {
+            unlink($serverRootPath . '.assetsrc');
+        }
+        Helper::emptyDirectory($serverRootPath . 'uglified' . DIRECTORY_SEPARATOR . 'assets');
+        Helper::emptyDirectory($serverRootPath . 'tmp' . DIRECTORY_SEPARATOR . 'assets');
     }
 
     public static function cleanupTmp(InputInterface $input, OutputInterface $output)
@@ -39,7 +41,7 @@ class Console
 
         $serverRootPath = Config::getServerRootPath();
         $tmpDir = $serverRootPath . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'assets';
-        if (file_exists($tmpDir) === false || is_dir($tmpDir) === false) {
+        if (is_dir($tmpDir) === false) {
             return true;
         }
 
@@ -103,8 +105,12 @@ class Console
     {
         self::_initConfig($input);
 
-        $compiledFiles = array();
         $files = Config::getPrecompile();
+        if (empty($files)) {
+            return true;
+        }
+
+        $compiledFiles = array();
         $serverRootPath = Config::getServerRootPath();
         foreach ($files as $file) {
             $file = ltrim($file, DIRECTORY_SEPARATOR);
