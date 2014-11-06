@@ -1,10 +1,8 @@
 <?php
 namespace Assets;
 
-use SplFileInfo;
 use AssetLoader;
-use Assets\Uglify\Js;
-use Assets\Uglify\Css;
+use SplFileInfo;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 
@@ -22,7 +20,6 @@ class Helper
 
         $serverRootPath = Config::getServerRootPath();
         $file = ltrim($file, DIRECTORY_SEPARATOR) . '.' . $type;
-
         if (Config::isPrecompileable()) {
             $compiledCacheFile = $serverRootPath . DIRECTORY_SEPARATOR . '.assetsrc';
             if (file_exists($compiledCacheFile)) {
@@ -32,11 +29,8 @@ class Helper
                 }
             }
 
-            if ($type === 'js') {
-                $distFile = Js::uglify($file);
-            } else {
-                $distFile = Css::uglify($file);
-            }
+            $uglifyClass = '\\Assets\\Uglify\\' . ucfirst($type);
+            $distFile = $uglifyClass::uglify($file);
             return ($distFile === false ? array() : array($distFile));
         }
 
