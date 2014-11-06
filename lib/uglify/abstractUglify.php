@@ -52,7 +52,7 @@ abstract class AbstractUglify
         if (file_exists($distFilePath) === false) {
             $distFile = new SplFileInfo($distFilePath);
             if (file_exists($distFile->getPath()) === false) {
-                mkdir($distFile->getPath(), 0774, true);
+                mkdir($distFile->getPath(), 0775, true);
             }
 
             if (static::_uglify($srcFiles, $distFilePath) === false) {
