@@ -11,8 +11,8 @@
     }],
     "require": {
         "php": ">=5.4.0",
-        "nanjingboy/assetloader": ">=0.1.0",
-        "nanjingboy/commander": ">=0.1.0"
+        "nanjingboy/assetloader": "*",
+        "nanjingboy/commander": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
