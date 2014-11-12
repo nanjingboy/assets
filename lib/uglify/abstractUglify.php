@@ -44,7 +44,15 @@ abstract class AbstractUglify
         $compiledBaseDir = $serverRootPath . DIRECTORY_SEPARATOR . 'tmp' .
             DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR;
         $srcFile = $serverRootPath . str_replace($serverRootPath, '', $srcFile);
-        $minFile = str_replace(array(self::_getBaseDir(), $compiledBaseDir), '', $srcFile);
+        $minFile = str_replace(
+            DIRECTORY_SEPARATOR,
+            '_',
+            str_replace(
+                array(self::_getBaseDir(), $compiledBaseDir),
+                '',
+                $srcFile
+            )
+        );
         return $compiledBaseDir . $minFile . '.min.' . md5(filemtime($srcFile)) . '.' . static::$_type;
 
     }
