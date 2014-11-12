@@ -36,10 +36,10 @@ Assets is a assets manager for PHP.
 return array(
     'path' => array(
         'serverRoot' => string,
-        'javascripts' => string, // relative to serverRoot path
-        'stylesheets' => string, // relative to serverRoot path
-        'images' => string, // relative to serverRoot path
-        'fonts' => string // relative to serverRoot path
+        'javascripts' => string, // relative to serverRoot path, default is the serverRoot path
+        'stylesheets' => string, // relative to serverRoot path, default is the serverRoot path
+        'images' => string, // relative to serverRoot path, default is the serverRoot path
+        'fonts' => string // relative to serverRoot path, default is the serverRoot path
     ),
     'precompile' => array() // the file's extension must be js or css, and it's relative to root javascripts(stylesheets) path
 );
