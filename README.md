@@ -49,6 +49,7 @@ return array(
 
 ```php
 <?php
+require __DIR__ . '/vendor/autoload.php';
 \Assets\Config::init($configFilePath);
 ```
 
