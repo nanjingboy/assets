@@ -7,6 +7,16 @@ final class Config
 {
     private static $_config;
 
+    private static function _parsePath($key, $config)
+    {
+        if (empty($config[$key])) {
+            return $config['serverRoot'];
+        }
+
+        $path = realpath($config['serverRoot'] . DIRECTORY_SEPARATOR . trim($config[$key], DIRECTORY_SEPARATOR));
+        return ($path === false ? $config['serverRoot'] : $path);
+    }
+
     public static function init($configFilePath)
     {
         $configFilePath = realpath($configFilePath);
@@ -15,19 +25,15 @@ final class Config
         }
 
         $config = require($configFilePath);
-        $serverRoot = rtrim(realpath($config['path']['serverRoot']), DIRECTORY_SEPARATOR);
-        if ($serverRoot === false) {
+        $config['path']['serverRoot'] = rtrim(realpath($config['path']['serverRoot']), DIRECTORY_SEPARATOR);
+        if ($config['path']['serverRoot'] === false) {
             throw new AssetsException('Error config for server root path.');
         }
 
-        foreach ($config['path'] as $key => $path) {
-            if ($key === 'serverRoot') {
-                $path = $serverRoot;
-            } else {
-                $path = $serverRoot . DIRECTORY_SEPARATOR . trim($path, DIRECTORY_SEPARATOR);
-            }
-            $config['path'][$key] = $path;
-        }
+        $config['path']['fonts'] = self::_parsePath('fonts', $config['path']);
+        $config['path']['images'] = self::_parsePath('images', $config['path']);
+        $config['path']['javascripts'] = self::_parsePath('javascripts', $config['path']);
+        $config['path']['stylesheets'] = self::_parsePath('stylesheets', $config['path']);
 
         AssetLoader::init(
             $config['path']['serverRoot'],
