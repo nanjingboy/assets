@@ -68,7 +68,7 @@ If you don't use coffeeScript, sass or less, you don't have to install coffeeScr
 * [image-url](https://github.com/nanjingboy/assets/blob/master/test/app/assets/stylesheets/home.scss#L23)
 * [font-url](https://github.com/nanjingboy/assets/blob/master/test/app/assets/stylesheets/home.scss#L17)
 * [javascript_include_tag](https://github.com/nanjingboy/assets/blob/master/assets.php#L4)
-* [stylesheet_include_tag](https://github.com/nanjingboy/assets/blob/master/assets.php#L15)
+* [stylesheet_include_tag](https://github.com/nanjingboy/assets/blob/master/assets.php#L16)
 
 ### require & require_dir directives:
 Get more details about require & require_dir directives in javascript(css) file from: [assetloader](https://github.com/nanjingboy/assetloader#usage)
