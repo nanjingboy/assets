@@ -23,6 +23,7 @@ Assets is a assets manager for PHP.
 
 ```shell
  $ mkdir tmp/assets -p
+ $ mkdir tmp/assetLoader -p
  $ chmod -R a+w tmp
 
  $ mkdir uglified/assets -p
