@@ -8,7 +8,7 @@ if (is_file(__DIR__ . '/../vendor/autoload.php')) {
 
 $commander = new Commander();
 $commander->name('assets')
-    ->version('0.1.0')
+    ->version('0.1.7')
     ->command(
         array(
             'name' => 'clean',
