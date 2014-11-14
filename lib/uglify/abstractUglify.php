@@ -22,39 +22,11 @@ abstract class AbstractUglify
         $result = array('files' => array(), 'hashes' => array());
         foreach ($compiledFiles as $compiledFile) {
             $compiledFile = "{$serverRootPath}{$compiledFile}";
-            $minFile = static::parseMinFilePath($compiledFile);
-            if (file_exists($minFile) === false) {
-                if (static::_uglify(array($compiledFile), $minFile)) {
-                    array_push($result['files'], $minFile);
-                    array_push($result['hashes'], md5(filemtime($minFile)));
-                    continue;
-                }
-            }
-
             array_push($result['files'], $compiledFile);
-            array_push($result['hashes'], md5(filemtime($compiledFile)));
+            array_push($result['hashes'], filemtime($compiledFile));
         }
 
         return $result;
-    }
-
-    public static function parseMinFilePath($srcFile)
-    {
-        $serverRootPath = Config::getServerRootPath();
-        $compiledBaseDir = $serverRootPath . DIRECTORY_SEPARATOR . 'tmp' .
-            DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR;
-        $srcFile = $serverRootPath . str_replace($serverRootPath, '', $srcFile);
-        $minFile = str_replace(
-            DIRECTORY_SEPARATOR,
-            '_',
-            str_replace(
-                array(self::_getBaseDir(), $compiledBaseDir),
-                '',
-                $srcFile
-            )
-        );
-        return $compiledBaseDir . $minFile . '.min.' . md5(filemtime($srcFile)) . '.' . static::$_type;
-
     }
 
     public static function uglify($file)

@@ -1,3 +1,6 @@
+## 0.1.7 November 13, 2014
+* Remove pre uglify a single file logic
+
 ## 0.1.5 November 13, 2014
 * Set default javascripts,stylesheets,images or fonts path
 * Add prefix argument for `javascript_include_tag` & `stylesheet_include_tag`

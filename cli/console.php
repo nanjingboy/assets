@@ -84,11 +84,6 @@ class Console
                 if (file_exists($compiledFile)) {
                     array_push($usefulFiles, $compiledFile);
                 }
-
-                $minFile = $uglifyClass::parseMinFilePath($compiledFile);
-                if (file_exists($minFile)) {
-                    array_push($usefulFiles, $minFile);
-                }
             }
         }
 
