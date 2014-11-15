@@ -79,7 +79,7 @@ Get more details about require & require_dir directives in javascript(css) file 
 ```shell
 $ bin/assets
 
-assets version 0.1.0
+assets version 0.1.7
 
 Usage:
   [options] command [arguments]
